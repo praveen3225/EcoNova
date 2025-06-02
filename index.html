@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lead Form</title>
+</head>
+<link rel="stylesheet" href="./index.css">
+<body>
+  <h2>Enter your details</h2>
+<div class="row">
+  <div class="form-background">    
+    <form id="leadForm">
+      <div>
+      <label>First Name:</label><br>
+      <input type="text" id="First_Name" required><br><br>
+      </div>
+
+      <div>
+      <label>Last Name:</label><br>
+      <input type="text" id="Last_Name" required><br><br>
+      </div>
+
+      <div>
+      <label>Email:</label><br>
+      <input type="email" id="Email" required><br><br>
+      </div>
+
+      <div>
+      <label>Phone:</label><br>
+      <input type="text" id="Phone" required><br><br>
+      </div>
+
+      <div>
+      <button type="submit">Create Lead</button>
+      </div>
+      
+    </form>
+  </div>
+  </div>
+
+  <script src="https://js.zohostatic.com/zohocrm/v2.0/sdk/ZohoEmbededAppSDK.min.js"></script>
+  <script>
+    window.onload = function () {
+      ZOHO.embeddedApp.on("PageLoad", function () {
+        document.getElementById("leadForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const data = {
+            data: [{
+              First_Name: document.getElementById("First_Name").value,
+              Last_Name: document.getElementById("Last_Name").value,
+              Email: document.getElementById("Email").value,
+              Phone: document.getElementById("Phone").value
+            }]
+          };
+
+          ZOHO.CRM.API.insertRecord({
+            Entity: "Leads",
+            APIData: data
+          }).then(function (response) {
+            if (response.data[0].code === "SUCCESS") {
+              alert("Lead Created Successfully!");
+            } else {
+              alert("Error creating lead.");
+              console.log(response);
+            }
+          });
+        });
+      });
+
+      ZOHO.embeddedApp.init();
+    };
+  </script>
+</body>
+</html>
